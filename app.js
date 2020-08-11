@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const helmet = require('helmet')
@@ -14,10 +15,11 @@ app.use(function validateBearerToken(req, res, next) {
     const token = process.env.token
     const authMethod = req.get('Authorization')
 
-    if (!authMethod || !authMethod.toLowerCase().startsWith("bearer ")) {
+    if (!authMethod || !authMethod.toLowerCase().startsWith("bearer ") || authMethod.substring(7).trim() !== token) {
         res.status(401).json({ error: 'Unauthorized access, please provide proper authentication' })
+    } else {
+        next()
     }
-    next()
 })
 
 app.get('/movie', (req, res) => {
