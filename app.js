@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const helmet = require('helmet')
+const cors= require('cors')
 const MOVIES = require('./movies-data.json')
 
 const app = express()
@@ -9,7 +10,7 @@ app.use(morgan('dev'))
 app.use(helmet())
 app.use(cors())
 
-app.use(function validateBearerToken(req, req, next) {
+app.use(function validateBearerToken(req, res, next) {
     const token = process.env.token
     const authMethod = req.get('Authorization')
 
@@ -19,6 +20,14 @@ app.use(function validateBearerToken(req, req, next) {
     next()
 })
 
+app.get('/movie', (req, res) => {
+    const {genre, country, avg_vote} = req.query
+    res.json(MOVIES)
+})
+
+const server = app.listen(8080, () => {
+    console.log(`Port ${server.address().port} is an avocado`)
+})
 // Users can search for Movies by genre, country or avg_vote
 // The endpoint is GET /movie
 // The search options for genre, country, and/or average vote are provided in query string parameters.
