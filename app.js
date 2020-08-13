@@ -27,11 +27,7 @@ app.get('/movie', (req, res) => {
     let results = MOVIES
 
     if (avg_vote) {
-        if (avg_vote > 0 && avg_vote < 9.6) {
-            results = results.filter((movie) => movie.avg_vote >= avg_vote)
-        } else {
-            ('Sorry, please provide a rating between 0 and 9.5 :/')
-        }
+        results = results.filter((movie) => movie.avg_vote >= avg_vote)
     }
     if (genre) {
         results = results.filter((movie) => movie.genre.toLowerCase().includes(genre.toLowerCase()))
